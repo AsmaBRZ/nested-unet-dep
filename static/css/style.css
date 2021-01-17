@@ -1,0 +1,146 @@
+    @font-face {
+        font-family: 'BodoniFLF Regular';
+        font-style: normal;
+        font-weight: normal;
+        src: local('BodoniFLF Regular'), url('../font/BodoniFLF-Roman.woff') format('woff');
+    }
+    
+    @font-face {
+        font-family: 'BodoniFLF Medium Italic';
+        font-style: normal;
+        font-weight: normal;
+        src: local('BodoniFLF Medium Italic'), url('../font/BodoniFLF-Italic.woff') format('woff');
+    }
+    
+    @font-face {
+        font-family: 'BodoniFLF Bold';
+        font-style: normal;
+        font-weight: normal;
+        src: local('BodoniFLF Bold'), url('../font/BodoniFLF-Bold.woff') format('woff');
+    }
+    
+    @font-face {
+        font-family: 'BodoniFLF Bold Italic';
+        font-style: normal;
+        font-weight: normal;
+        src: local('BodoniFLF Bold Italic'), url('../font/BodoniFLF-BoldItalic.woff') format('woff');
+    }
+    
+    @font-face {
+        font-family: 'Spartan';
+        font-style: normal;
+        font-weight: normal;
+        src: local('Spartan SemiBold'), url('../font/static/Spartan-SemiBold.ttf') format('TrueType');
+    }
+    
+    html {
+        background-color: #242D38;
+    }
+    
+    body {
+        font-family: 'BodoniFLF Medium Italic';
+        font-size: 32px;
+        background-color: #242D38;
+        color: #FCF8F3;
+    }
+    
+    header h2 {
+        font-family: 'Spartan', sans-serif;
+        font-weight: bold;
+        color: #E6E2E2;
+        text-transform: uppercase;
+    }
+    
+    h1 small {
+        display: block;
+        font-size: 15px;
+        padding-top: 8px;
+        color: gray;
+    }
+    
+    .avatar-upload {
+        position: relative;
+        max-width: 250px;
+        margin: 20px auto;
+    }
+    
+    .avatar-upload .avatar-edit {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .avatar-upload .avatar-edit input {
+        display: none;
+    }
+    
+    .avatar-upload .avatar-edit input+label {
+        justify-content: center;
+        text-align: center;
+        vertical-align: middle;
+        width: 100%;
+        height: 100%;
+        margin-bottom: 0;
+        color: white;
+        cursor: pointer;
+        font-weight: normal;
+        transition: all 0.2s ease-in-out;
+        opacity: 0;
+    }
+    
+    .avatar-upload .avatar-edit input+label:hover {
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 1;
+    }
+    
+    .avatar-upload .avatar-edit input+label:after {
+        /* content: "\f040";
+    font-family: 'FontAwesome'; */
+        z-index: inherit 1;
+        content: "choisir une photo";
+        color: #FCF8F3;
+        position: absolute;
+        top: 45%;
+        font-size: 24px;
+        bottom: auto;
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin: auto;
+        opacity: 1;
+    }
+    
+    .avatar-upload .avatar-preview {
+        width: 250px;
+        height: 250px;
+        position: relative;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
+    }
+    
+    .avatar-upload .avatar-preview>div {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    
+    .made-by {
+        position: fixed;
+        font-size: 26px;
+        bottom: 10px;
+        left: 20px;
+        color: #A0B2B6;
+    }
+
+    .logo {
+        width: 200px;
+        position: fixed;
+        bottom: 10px;
+        right: 20px;
+    }
+    
+    .logo img {
+        width: 100%;
+    }
