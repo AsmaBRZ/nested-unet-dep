@@ -12,6 +12,33 @@ import matplotlib.pyplot as plt
 
 model_w = None
 
+
+def weighted_loss(original_loss_function: typing.Callable, weights_list: dict) -> typing.Callable:
+    def loss_function(true, pred):
+        class_selectors = tf.cast(K.argmax(true, axis=-1), tf.int32)
+        class_selectors = [K.equal(i, class_selectors) for i in range(len(weights_list))]
+        class_selectors = [K.cast(x, K.floatx()) for x in class_selectors]
+        weights = [sel * w for sel, w in zip(class_selectors, weights_list)]
+        weight_multiplier = weights[0]
+        for i in range(1, len(weights)):
+            weight_multiplier = weight_multiplier + weights[i]
+        loss = original_loss_function(true, pred)
+        loss = loss * weight_multiplier
+        return loss
+    return loss_function
+
+
+@tf.function
+def loss(y_true, y_pred, smooth=1, cat_weight=1, iou_weight=1, dice_weight=1):
+    return cat_weight * K.categorical_crossentropy(y_true, y_pred) \
+           + iou_weight * log_iou(y_true, y_pred, smooth) \
+           + dice_weight * log_dice(y_true, y_pred, smooth)
+
+@tf.function
+def log_iou(y_true, y_pred, smooth=1):
+    return - K.log(iou(y_true, y_pred, smooth))
+
+
 @tf.function
 def iou(y_true, y_pred, smooth=1):
     intersection = K.sum(K.abs(y_true * y_pred), axis=[1, 2, 3])
@@ -34,8 +61,9 @@ def predict(data):
         x = txt.split("/", 3)
         my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
-        model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice})
-        model_w.load_weights(my_file) 
+       #model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice})
+        model_w = tf.keras.models.load_model(my_file,compile=False)
+        #model_w.load_weights(my_file) 
 
     image = Image.open(data)
     image=np.array(image)        
