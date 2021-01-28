@@ -12,6 +12,19 @@ import matplotlib.pyplot as plt
 
 model_w = None
 
+@tf.function
+def iou(y_true, y_pred, smooth=1):
+    intersection = K.sum(K.abs(y_true * y_pred), axis=[1, 2, 3])
+    union = K.sum(y_true, [1, 2, 3]) + K.sum(y_pred, [1, 2, 3]) - intersection
+    return K.mean((intersection + smooth) / (union + smooth), axis=0)
+
+
+@tf.function
+def dice(y_true, y_pred, smooth=1):
+    intersection = K.sum(y_true * y_pred, axis=[1, 2, 3])
+    union = K.sum(y_true, axis=[1, 2, 3]) + K.sum(y_pred, axis=[1, 2, 3])
+    return K.mean((2. * intersection + smooth) / (union + smooth), axis=0)
+
 
 def predict(data):  
     global model_w
@@ -21,7 +34,7 @@ def predict(data):
         x = txt.split("/", 3)
         my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
-        model_w = tf.keras.models.load_model(my_path)
+        model_w = tf.keras.models.load_model(my_path,,custom_objects={"IOU": iou, "DICE":dice})
         model_w.load_weights(my_file) 
 
     image = Image.open(data)
