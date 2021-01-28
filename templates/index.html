@@ -4,60 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image classification</title>
+    <title>image recognition</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/Chart.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/Chart.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 
 <body>
-    <header class="text-center my-5">
-        <h2 >Image Classification</h2>
-        <h5 class="mt-4">Choose an image from your gallery and predict the class. The model is able to recognize: <br> airplane, automobile, bird,
-            chat, deer, dog, frog, horse, boat and truck.</h5>
-    </header>
-    <hr>
+    
     <div class="container">
+            <header class="text-center my-4 mx-5">
+                    <h2 >Cells segmentation with unet++</h2>
+                    <h5 class="mt-4">Choose an image from your gallery and isolate the available cells based on segmentation.</h5>
+            </header>
         <div class="row">
-            <div class="col-md-6 text-center">
+            <div class="offset-md-2 col-md-8 text-center">
                 <form enctype="multipart/form-data" action="{{ url_for('photoRecognize')}}" method="post" id="uploadForm">
 
-
+                    
                     <div class="avatar-upload">
                         <div class="avatar-edit">
                             <input type='file' id="imageUpload" name="image_data" accept=".png, .jpg, .jpeg" />
                             <label for="imageUpload"></label>
                         </div>
                         <div class="avatar-preview">
-                            <div id="imagePreview" style="background-image: url('{{ url_for('static', filename='images/dog3.jpg') }}');">                          </div>
-                            
-
+                            <div id="imagePreview" style="background-image: url('../static/images/result-example.png');">
+                            </div>
                         </div>
                     </div>
-                    <h3>Upload an image</h3>
+                    <div class="col-md-12 text-center" style="font-size: 24px;font-weight: bold">
+                        <p>click on the image above to select a photo</p>
+                    </div>
+                    <!-- <div class="image-div">
+                        <img id="image" src="images/mask.png" alt="image-mask">
+                        <input type='file' id="image-input" name="image_data" accept=".png, .jpg, .jpeg" />
+                        <label for="image-input"></label>
+                    </div>
+                    <h3>Image Upload</h3> -->
                 </form>
-            </div>
-            <div class="col-md-6 text-center">
-
-                <div style="height: 250px;padding: 0px 150px;margin: 20px 0">
-                    <canvas id="barChart" width="100"></canvas>
-                </div>
-                <h3 id="class">Dog</h3>
             </div>
         </div>
 
     </div>
     <div class="made-by">Realized by: Asma BRAZI</div>
-    <div class="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo-university" ></div>
+    <div class="logo"><img src="../static/images/logo.png" alt="logo-university" ></div>
 </body>
-
-
-
-
-<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/Chart.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/Chart.js"></script>
+<script src="../static/js/jquery-3.5.1.min.js"></script>
 <script>
     var ctx = document.getElementById("barChart").getContext('2d');
     var barChart = new Chart(ctx, {
@@ -65,7 +60,7 @@
         data: {
             labels: [""],
             datasets: [{
-                label: 'Probabilty',
+                label: 'data-1',
                 data: [70],
                 backgroundColor: "#8A1638"
             }]
@@ -105,10 +100,11 @@
                 contentType: false,
                 success: function (result) {
                     console.log(result)
-                    document.getElementById("barChart").innerHTML =""
-                    var r = jQuery.parseJSON(result.results);
-                    newChart(r.proba,r.class);
-                    $("#class").html(r.class);
+
+                    document.getElementById("barChart").html('');
+                    newChart(result.results.proba,result.results.class);
+                    $("#class").html(result.results.class);
+                    $('#imagePreview').css("background-image", "url(/myimage.jpg)"); 
                  },
                 error: function (er) {
                     console.log('error: '+er);
@@ -143,7 +139,6 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Probabilty',
                 data: [number],
                 backgroundColor: "#8A1638"
             }]

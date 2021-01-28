@@ -1,3 +1,5 @@
+import base64
+import io
 import tensorflow as tf
 import h5py
 import json
@@ -7,9 +9,9 @@ from skimage.transform import resize
 from flask import jsonify 
 import os
 
-import matplotlib.pyplot as plt
 
 model_w = None
+
 
 def predict(data):  
     global model_w
@@ -22,33 +24,25 @@ def predict(data):
         model_w = tf.keras.models.load_model(my_path)
         model_w.load_weights(my_file) 
 
-    
-    IMG_SHAPE = (256,256)
     image = Image.open(data)
-    image=np.array(image)
-    print(image.shape)
-    
+    image=np.array(image)        
     image = image.astype('float32')
 
-    image = resize(image, IMG_SHAPE, anti_aliasing=True)
+    image = resize(image, (256, 256), anti_aliasing=True)
     image /= 255
 
     test_images=[image]
     test_images = np.array(test_images)
 
-    Y_pred_test = model_w.predict(test_images) # Predict probability of image belonging to a class, for each class
+    loc = model_w.predict(test_images)
 
-    fig,ax = plt.subplots(1)
-    fig.patch.set_visible(False)
-    plt.axis('off')
-    fig = plt.figure(figsize=(20, 20))
 
-    ax1 = fig.add_subplot(1,2,1)
-    ax1.imshow(image)
+    img = Image.fromarray(loc.astype("uint8"))
+    rawBytes = io.BytesIO()
+    img.save(rawBytes, "JPEG")
+    rawBytes.seek(0)
+    img_base64 = base64.b64encode(rawBytes.read())
+    a = format(img_base64.decode('utf-8'))
+    obj = { 'image': str(a)}
+    return json.dumps(obj)
 
-    ax2 = fig.add_subplot(1,2,2)
-    ax2.imshow(Y_pred_test[0])
-
-    encoded = fig_to_base64(fig)
-    
-    return '<img src="data:image/png;base64, {}">'.format(encoded.decode('utf-8'))
