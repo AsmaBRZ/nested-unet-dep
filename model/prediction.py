@@ -34,7 +34,7 @@ def predict(data):
         x = txt.split("/", 3)
         my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
-        model_w = tf.keras.models.load_model(my_path,,custom_objects={"IOU": iou, "DICE":dice})
+        model_w = tf.keras.models.load_model(my_path,custom_objects={"IOU": iou, "DICE":dice})
         model_w.load_weights(my_file) 
 
     image = Image.open(data)
