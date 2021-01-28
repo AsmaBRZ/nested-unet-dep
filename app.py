@@ -14,10 +14,7 @@ def photoRecognize():
         if data == None:
             return 'no image received'
         else:
-            # model.predict.predict returns a dictionary
-            cv.dnn_registerLayer('Crop', CropLayer)
-            net = cv.dnn.readNet("/app/model/deploy.prototxt", "/app/model/hed_pretrained_bsds.caffemodel")
-            prediction = predict(data,net)
+            prediction = predict(data)
     else:
       return render_template('index.html')
 
