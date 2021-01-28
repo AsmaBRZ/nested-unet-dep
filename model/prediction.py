@@ -8,7 +8,7 @@ from PIL import Image
 from skimage.transform import resize
 from flask import jsonify 
 import os
-
+import matplotlib.pyplot as plt
 
 model_w = None
 
@@ -36,8 +36,17 @@ def predict(data):
 
     loc = model_w.predict(test_images)
 
+    f = plt.figure()
+    ax1 = f.add_subplot(1,2, 1) 
+    plt.imshow(image)
 
-    img = Image.fromarray(loc.astype("uint8"))
+    ax2 = f.add_subplot(1,2, 2)
+    plt.imshow(loc)
+
+    ax1.title.set_text('Original image')
+    ax2.title.set_text('Segmented image')
+
+    img = Image.fromarray(f.astype("uint8"))
     rawBytes = io.BytesIO()
     img.save(rawBytes, "JPEG")
     rawBytes.seek(0)
