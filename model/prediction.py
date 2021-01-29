@@ -54,16 +54,21 @@ def dice(y_true, y_pred, smooth=1):
 
 weights = {0.0: 1.0, 1.0: 6.063862886734454, 2.0: 72.90944265835127}
 def predict(data):  
+    print("IN DATA")
     global model_w
 
     if model_w is None:
+        
         txt=os.path.abspath(__file__)
         x = txt.split("/", 3)
         my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
+        print("before load model")
         model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice,"loss_function":weighted_loss(loss,weights)})
+        print("after load model")
         #model_w.load_weights(my_file) 
-
+    
+    print("before open image")
     image = Image.open(data)
     image=np.array(image)        
     image = image.astype('float32')
@@ -73,7 +78,7 @@ def predict(data):
 
     test_images=[image]
     test_images = np.array(test_images)
-
+    print("before predict")
     loc = model_w.predict(test_images)
 
     f = plt.figure()
