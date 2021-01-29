@@ -9,7 +9,7 @@ from skimage.transform import resize
 from flask import jsonify 
 import os
 import matplotlib.pyplot as plt
-import typing
+
 model_w = None
 
 
@@ -59,10 +59,9 @@ def predict(data):
     if model_w is None:
         txt=os.path.abspath(__file__)
         x = txt.split("/", 3)
-        my_path="/"+x[1]+"/"+x[2]+"/my_model/"
+        my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
-       #model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice})
-        model_w = tf.keras.models.load_model(my_path,compile=False)
+        model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice})
         #model_w.load_weights(my_file) 
 
     image = Image.open(data)
