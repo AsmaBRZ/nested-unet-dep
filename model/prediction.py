@@ -61,7 +61,7 @@ def predict(data):
         x = txt.split("/", 3)
         my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
-        model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice,"loss_function"=weighted_loss(loss,weights)})
+        model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice,"loss_function":weighted_loss(loss,weights)})
         #model_w.load_weights(my_file) 
 
     image = Image.open(data)
