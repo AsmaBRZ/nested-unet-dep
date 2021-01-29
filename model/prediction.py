@@ -52,7 +52,7 @@ def dice(y_true, y_pred, smooth=1):
     union = K.sum(y_true, axis=[1, 2, 3]) + K.sum(y_pred, axis=[1, 2, 3])
     return K.mean((2. * intersection + smooth) / (union + smooth), axis=0)
 
-
+weights = {0.0: 1.0, 1.0: 6.063862886734454, 2.0: 72.90944265835127}
 def predict(data):  
     global model_w
 
@@ -61,7 +61,7 @@ def predict(data):
         x = txt.split("/", 3)
         my_path="/"+x[1]+"/"+x[2]+"/my_model"
         my_file="/"+x[1]+"/"+x[2]+"/my_model.h5"
-        model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice})
+        model_w = tf.keras.models.load_model(my_path,custom_objects={"iou": iou, "dice":dice,"loss_function"=weighted_loss(loss,weights)})
         #model_w.load_weights(my_file) 
 
     image = Image.open(data)
