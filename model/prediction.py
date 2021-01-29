@@ -9,7 +9,7 @@ from skimage.transform import resize
 from flask import jsonify 
 import os
 import matplotlib.pyplot as plt
-
+import typing
 model_w = None
 
 
